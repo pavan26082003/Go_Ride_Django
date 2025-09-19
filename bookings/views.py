@@ -9,8 +9,6 @@ from .serializers import UserRegisterSerializer, BusSerializer, BookingSerialize
 from rest_framework.response import Response
 from .models import Bus, Seat, Booking
 
-import razorpay
-from django.conf import settings
 
 class RegisterView(APIView):
     def post(self, request):
@@ -78,34 +76,3 @@ class UserBookingView(APIView):
         bookings = Booking.objects.filter(user_id= user_id)
         serializer = BookingSerializer(bookings, many=True)
         return Response(serializer.data)
-    
-
-    # -------payment section
-
-    client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
-
-class CreatePaymentOrderView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        amount = int(request.data.get("amount", 0)) * 100  # amount in paise
-        currency = "INR"
-        receipt = f"receipt_{request.user.id}_{request.data.get('booking_id')}"
-
-        order = client.order.create(dict(amount=amount, currency=currency, receipt=receipt))
-        return Response(order)
-    
-
-
-class MarkBookingPaidView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        booking_id = request.data.get("booking_id")
-        try:
-            booking = Booking.objects.get(id=booking_id, user=request.user)
-            booking.is_paid = True
-            booking.save()
-            return Response({"detail": "Payment successful and booking marked paid."})
-        except Booking.DoesNotExist:
-            return Response({"error": "Booking not found"}, status=404)

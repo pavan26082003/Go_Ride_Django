@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 RAZORPAY_KEY_ID = "your_razorpay_key_id"
 RAZORPAY_KEY_SECRET = "your_razorpay_key_secret"
 
+ALLOWED_HOSTS = ["GoRide.onrender.com", "localhost", "127.0.0.1"]
 
 REST_FRAMEWORK = {
     

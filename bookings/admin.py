@@ -11,6 +11,7 @@ class SeatAdmin(admin.ModelAdmin):
 class BookingAdmin(admin.ModelAdmin):
     list_display = ('user', 'bus', 'seat', 'booking_time', 'origin','price')
 
+
 admin.site.register(Bus, BusAdmin)
 admin.site.register(Seat, SeatAdmin)
 admin.site.register(Booking, BookingAdmin)

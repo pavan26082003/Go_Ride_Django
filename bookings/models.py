@@ -37,7 +37,9 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.user.username}-{self.bus.bus_name}-{self.bus.start_time}-{self.bus.reach_time}-{self.seat.seat_number}"
-    
+
+
+
     @property
     def price(self):
         return self.bus.price
